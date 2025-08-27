@@ -1,444 +1,384 @@
-# A1 - Lists and Nodes (CS 2341, Fall 2025)
+# A1 — Price-to-Earnings (CS 1342, Fall 2025)
 
-* **Points:** Q1 (20) + Q2 (40) + Q3 (40) = **100**
-* **Due:** Thu, **Sep 4, 2025**, 11:59 PM (America/Chicago)
-* **Late policy:** 1 days: −10%; 2 days: −20%; 3 days: −30%; >10 days: no credit.
+## Intro (Context)
 
+A small business owner estimates **market value** using the *price-to-earnings* approach:
 
----
+```
+market value = projected earning × price-to-earnings ratio
+```
 
-## Assignment Focus
-
-Implement fundamental data structures **from scratch**:
-
-* **Q1:** Linked List (remove duplicates)
-* **Q2:** Stack (resizing array, characters only)
-* **Q3:** Queue (linked list, integers only)
-
-**Critical requirements**
-
-* **No templates/generics** — each container is type-specific.
-* **Custom Node classes** — `IntNode` for integer containers; for Q2 use `char[]` (or optionally a `CharNode` you design).
-* **Custom Container classes** — one per problem as needed.
-* Each question’s node/container is **tailored to that problem**.
+You will read **5** projected earnings and **5** price-to-earnings ratios (one per year), validate them, compute the **5** market values, and print each year’s earning, ratio, and market value on its own line. This specification aligns with our course PDF handout for Assignment 1.&#x20;
 
 ---
 
-## Global Rules
+## Example
 
-* **Allowed library:** Only Princeton **`algs4`** I/O (`StdIn`, `StdOut`).
-* **Forbidden:** All `java.util.*` collections (`ArrayList`, `LinkedList`, `Stack`, `Queue`, etc.).
-* **Required filenames (one public class per file):**
+For the following inputs (earnings then ratios):
 
-    * Q1: `RemoveDuplicates.java`
-    * Q2: `Parentheses.java`
-    * Q3: `Josephus.java`
+```
+200000, 230000, 250000, 300000, 325000
+6.0, 6.5, 6.75, 7.0, 7.25
+```
+
+The corresponding market values are:
+
+```
+1200000, 1495000, 1687500, 2100000, 2356250
+```
 
 ---
 
-## Project Layout & Rules
+## Project layout & rules
 
-```text
-a1-lists-and-nodes/
-├─ gradlew / gradlew.bat / build.gradle     (provided; do not edit)
+```
+a1-price-to-earnings/
+├─ gradlew / gradlew.bat / build.gradle  (provided; do not edit)
 ├─ src
 │  └─ main
 │     └─ java
-│        └─ com
-│           └─ student_word
-│              ├─ RemoveDuplicates.java     (you add)
-│              ├─ Parentheses.java          (you add)
-│              └─ Josephus.java             (you add)
-└─ (other project files)                    (do not edit)
+│        ├─ Business.java               (you add)
+│        └─ BusinessEvaluation.java     (you add)
+└─ (other project files)                (do not edit)
 ```
 
-* **Only add code** under `src/main/java/com/student_word/`.
-* **Do not** modify Gradle files, tests, or anything outside `src/main/java/com/student_word/`.
-* Your classes must be named exactly:
-
-    * `RemoveDuplicates`
-    * `Parentheses`
-    * `Josephus`
-* Your code **must compile** with the provided Gradle wrapper.
-* Follow the assignment’s **I/O contract** exactly as described so tests can run.
+* **Only** add your code to `src/main/java/`.
+* **Do not** modify Gradle files, tests, or any files outside `src/main/java/`.
+* Your code must **compile**.
 
 ---
 
-## Build & Run
+## Function Description
 
-### Using Gradle (recommended)
+### `Business` (in `src/main/java/Business.java`)
 
-```bash
-# macOS/Linux/Windows (PowerShell/CMD)
-./gradlew clean test     # compiles and runs tests
-./gradlew build          # builds (and tests) the project
-```
+Create a class to encapsulate year-by-year data.
 
-If you want to run a class manually (outside tests), run it with `java` using the compiled classes:
+* **Fields**
 
-```bash
-# macOS/Linux
-java -cp build/classes/java/main:algs4.jar com.student_word.ClassName < input.txt
-java -cp build/classes/java/main:algs4.jar com.student_word.ClassName arg1 arg2
+    * `double[] projectedEarning` — length **5**
+    * `double[] marketValue` — length **5**
 
-# Windows
-java -cp build\classes\java\main;algs4.jar com.student_word.ClassName < input.txt
-java -cp build\classes\java\main;algs4.jar com.student_word.ClassName arg1 arg2
-```
+* **Constructor**
 
-> If your Gradle build already declares `algs4` as a dependency, you can omit `algs4.jar` from the `-cp` above.
+    * `Business(double[] projectedEarning)`
+      Initializes `this.projectedEarning` from the argument (length must be 5).
+      Initializes all entries of `marketValue` to `0.0`.
 
-### Plain `javac` (fallback)
+* **Getters**
 
-```bash
-# macOS/Linux
-javac -cp .:algs4.jar -d out src/main/java/com/student_word/*.java
-java  -cp out:algs4.jar com.student_word.ClassName
+    * `double[] getProjectedEarning()`
+    * `double[] getMarketValue()`
 
-# Windows
-javac -cp .;algs4.jar -d out src\main\java\com\student_word\*.java
-java  -cp out;algs4.jar com.student_word.ClassName
-```
+* **Setters (market values)**
+
+    * `void setMarketValue(int index, double value)` — update one element by index
+    * `void setMarketValue(double[] values)` — bulk update (length must be 5)
+
+> Keep names and array sizes **exactly** as specified.
+
+### `BusinessEvaluation` (in `src/main/java/BusinessEvaluation.java`)
+
+This is the **entry point** with `public static void main(String[] args)`:
+
+1. **Read 5 earnings** (as doubles). Each must be in **\[200000, 500000]**; re-prompt until valid.
+2. **Construct** a `Business` with the earnings array.
+3. **Read 5 ratios** (as doubles). Each must be in **\[0.0, 10.0]**; re-prompt until valid.
+4. **Compute** `marketValue[i] = projectedEarning[i] * ratio[i]` and store in the `Business`.
+5. **Print 5 lines**, each containing:
+   `projectedEarning[i] ratio[i] marketValue[i]`
+
+You may write small helper methods (e.g., `readInRange(...)`) as needed.
 
 ---
 
-## Q1 — Delete Duplicate-Value Nodes from a Sorted Linked List (20 pts)
+## Returns
 
-**File:** `RemoveDuplicates.java`
-**Input:** `StdIn`
-**Container:** Integer-only **singly linked list**
-**Node:** `IntNode` (you design it)
+This is a console program. It **prints** exactly **5** lines of results (no extra commentary) to standard output. Methods in `Business` return arrays or `void` as documented above.
 
-### Context
+---
 
-Given the head of a **sorted** integer linked list (ascending), remove duplicates so each value appears exactly once.
+## Input Format
 
-### Example
+The program will be run interactively. It should prompt and read values in this order:
 
-Input: `1 -> 2 -> 2 -> 3 -> 3 -> 3 -> 3 -> null`
-Output: `1 -> 2 -> 3 -> null`
+1. **Five** projected earnings (doubles), one at a time. Prompt:
 
-### Function Description
+   ```
+   Enter a value of earnings (200,000 - 500,000) :
+   ```
+2. **Five** price-to-earnings ratios (doubles), one at a time. Prompt:
 
-Implement a method that **removes duplicates** from a sorted list and returns the (possibly new) head.
+   ```
+   Enter a value of ratio (0.0 - 10.0) :
+   ```
 
-* **Function:** `IntNode removeDuplicates(IntNode head)`
-* **Returns:** head of the de-duplicated list
+If a value is out of range, **re-prompt** using the **same** prompt text until a valid number is provided.
 
-### Input Format
+---
 
-```
-t            # number of test cases
-n            # number of elements
-value_1
-value_2
-...
-value_n
-```
+## Constraints
 
-### Constraints
+* Exactly **5** earnings, each **200,000 ≤ earning ≤ 500,000**.
+* Exactly **5** ratios, each **0.0 ≤ ratio ≤ 10.0**.
+* Use `double` for all numeric inputs and calculations.
+* Output must be exactly **5** lines; each line:
+  `earning ratio marketValue`
+* **Project layout:** only edit
 
-* 1 ≤ t ≤ 10
-* 0 ≤ n ≤ 1000
-* −10^9 ≤ value ≤ 10^9
+    * `src/main/java/Business.java`
+    * `src/main/java/BusinessEvaluation.java`
+      Do **not** modify Gradle files, tests, or any other files.
+* Code must **compile**.
 
-### Sample Input
+---
 
-```
-1
-5
-1
-2
-2
-3
-4
-```
+## Sample Input
 
-### Sample Output
+*(Shown with the required prompts; user types numbers after each prompt.)*
 
 ```
-1 2 3 4
-```
-
-### Starter Code
-
-```java
-package com.student_word;
-
-// You will design the fields/constructors.
-class IntNode {
-    // e.g., data, next
-}
-
-class IntLinkedList {
-    // e.g., private head;
-
-    void append(int value) {
-        throw new UnsupportedOperationException();
-    }
-
-    IntNode removeDuplicates(IntNode head) {
-        throw new UnsupportedOperationException();
-    }
-
-    void print(IntNode head) {
-        throw new UnsupportedOperationException();
-    }
-}
-
-public class RemoveDuplicates {
-    public static void main(String[] args) {
-        // Read t, then for each test: read n and n values; build list; call removeDuplicates; print.
-        throw new UnsupportedOperationException();
-    }
-}
+Enter a value of earnings (200,000 - 500,000) : 200000
+Enter a value of earnings (200,000 - 500,000) : 230000
+Enter a value of earnings (200,000 - 500,000) : 250000
+Enter a value of earnings (200,000 - 500,000) : 300000
+Enter a value of earnings (200,000 - 500,000) : 325000
+Enter a value of ratio (0.0 - 10.0) : 6.0
+Enter a value of ratio (0.0 - 10.0) : 6.5
+Enter a value of ratio (0.0 - 10.0) : 6.75
+Enter a value of ratio (0.0 - 10.0) : 7.0
+Enter a value of ratio (0.0 - 10.0) : 7.25
 ```
 
 ---
 
-## Q2 — Parentheses Balance Checker (40 pts)
-
-**File:** `Parentheses.java`
-**Input:** `StdIn` (entire input is the string to check)
-**Container:** Character-only **resizing array stack** (start capacity = 1, **double when full**)
-**Storage:** `char[]` (or optionally your own `CharNode[]` design)
-
-### Context
-
-Determine whether brackets in the input are balanced and properly nested. Consider only `()[]{}`; ignore all other characters.
-
-### Examples
-
-* `[()]{}{[()()]()}` → `true`
-* `[(])` → `false`
-
-### Function Description
-
-* **Function:** `static boolean isBalanced(String s)`
-* **Returns:** `true` if balanced; otherwise `false`
-
-### Constraints
-
-* 0 ≤ input length ≤ 100,000
-* Stack **must** start with capacity 1 and **double** when full (optional shrink-on-quarter-full is allowed)
-
-### Sample Input
+## Sample Output
 
 ```
-[()]{}{[()()]()}
-```
-
-### Sample Output
-
-```
-true
-```
-
-### Starter Code (signatures only — no implementation)
-
-```java
-package com.student_word;
-
-// Implement a character stack backed by a resizing char[].
-class ResizingCharStack {
-    ResizingCharStack() {
-        throw new UnsupportedOperationException();
-    }
-
-    boolean isEmpty() {
-        throw new UnsupportedOperationException();
-    }
-
-    void push(char c) {
-        throw new UnsupportedOperationException();
-    }
-
-    char pop() {
-        throw new UnsupportedOperationException();
-    }
-}
-
-// Optional alternative you design yourself:
-// class CharNode { /* ... */ }
-
-public class Parentheses {
-    static boolean isBalanced(String s) {
-        throw new UnsupportedOperationException();
-    }
-
-    public static void main(String[] args) {
-        // Read entire StdIn as one string; print true/false using StdOut.
-        throw new UnsupportedOperationException();
-    }
-}
+200000 6.0 1200000
+230000 6.5 1495000
+250000 6.75 1687500
+300000 7.0 2100000
+325000 7.25 2356250
 ```
 
 ---
 
-## Q3 — Josephus Problem (40 pts)
+## Explanation
 
-**File:** `Josephus.java`
-**Input:** **Command-line args**: `N M`
-**Container:** Integer-only **linked-list queue**
-**Node:** `IntNode` (you may reuse your Q1 design or create a new one)
+Each year’s **market value** is computed by multiplying the corresponding **projected earning** and **price-to-earnings ratio**:
 
-### Context
+* `200000 × 6.0 = 1200000`
+* `230000 × 6.5 = 1495000`
+* `250000 × 6.75 = 1687500`
+* `300000 × 7.0 = 2100000`
+* `325000 × 7.25 = 2356250`
 
-`N` people labeled `0..N-1` sit in a circle. Repeatedly remove every `M`-th person and print the **elimination order**.
-
-### Example
-
-`N = 7, M = 2` → order: `1 3 5 0 4 2 6`
-
-### Function Description
-
-* **Function:** `static void printJosephusOrder(int N, int M)`
-* **Behavior:** prints the elimination order (space-separated) to `StdOut`.
-
-### Input Format
-
-```bash
-# macOS/Linux
-java -cp build/classes/java/main:algs4.jar com.student_word.Josephus 7 2
-
-# Windows
-java -cp build\classes\java\main;algs4.jar com.student_word.Josephus 7 2
-```
-
-### Constraints
-
-* 1 ≤ N ≤ 200,000
-* 1 ≤ M ≤ 1,000,000
-
-### Sample Output
-
-```
-1 3 5 0 4 2 6
-```
-
-### Starter Code (signatures only — no implementation)
-
-```java
-package com.student_word;
-
-// You will design the fields/constructors.
-class IntNode {
-    // e.g., data, next
-}
-
-// Linked-list queue of ints.
-class LinkedQueue {
-    void enqueue(int value) {
-        throw new UnsupportedOperationException();
-    }
-
-    int dequeue() {
-        throw new UnsupportedOperationException();
-    }
-
-    boolean isEmpty() {
-        throw new UnsupportedOperationException();
-    }
-
-    int size() {
-        throw new UnsupportedOperationException();
-    }
-}
-
-public class Josephus {
-    static void printJosephusOrder(int N, int M) {
-        // Enqueue 0..N-1, rotate (M-1) times, dequeue M-th, print order.
-        throw new UnsupportedOperationException();
-    }
-
-    public static void main(String[] args) {
-        // Parse N, M from args; call printJosephusOrder(N, M).
-        throw new UnsupportedOperationException();
-    }
-}
-```
+The program prints one line per year with `earning ratio marketValue`.
 
 ---
 
-## Grading Criteria
+## Grading (100 pts)
 
-**Functionality (50%)**
+* **Business.java design (fields, constructor, getters/setters):** 25
+* **Input validation — earnings (range & re-prompt):** 15
+* **Input validation — ratios (range & re-prompt):** 15
+* **Correct market value calculations:** 20
+* **Output format (exact 5 lines, correct order & spacing):** 10
+* **Code quality (comments, naming, indentation):** 10
+* **Project rules followed (files/compilation):** 5
 
-* Correct output on provided and hidden tests
-* Proper handling of edge cases
-
-**Data Structure Implementation (50%)**
-
-* Custom structures only (no `java.util` collections)
-* Correct node/container designs per problem
-* Proper resizing behavior in Q2
-
----
-
-## Submission Tips
-
-* Keep **one public class per file** with the **exact filenames** listed.
-* Use `StdIn`/`StdOut` from `algs4.jar` for I/O (no `Scanner`/`System.out` mixing).
-* Make sure your program **compiles and runs** with the commands shown above.
+**Late policy** (based on the course handout):
+0–2 days late: −20%; 2–4 days late: −40%; 4–7 days late: −60%; >7 days late: **no credit**.&#x20;
 
 ---
 
-# Connect IntelliJ to Your Private GitHub Classroom Repo
+## Build, run, and (optional) local test
+
+* **Run** (from terminal in the project root):
+
+    * Windows: `.\gradlew.bat run`
+    * macOS/Linux: `./gradlew run`
+
+* **Compile only**:
+
+    * Windows: `.\gradlew.bat build`
+    * macOS/Linux: `./gradlew build`
+
+* **(If provided) Run tests**:
+
+    * Windows: `.\gradlew.bat test`
+    * macOS/Linux: `./gradlew test`
+
+> In Eclipse, you can also use the **Gradle Tasks** view (or **Run As → Gradle build**) if Gradle integration is installed.
+
+---
+
+## Common pitfalls
+
+* ❌ Wrong array sizes (must be exactly 5).
+* ❌ Skipping input validation or not re-prompting.
+* ❌ Printing additional debug text in the final results.
+* ❌ Renaming required fields/methods (autograder may depend on names).
+* ❌ Placing files outside `src/main/java/`.
+
+## Need help?
+
+* Can’t push? Recheck token permissions (Content: Read & Write), repo access, and that you’re using the token as your password.
+* Build problems? Make sure you didn’t edit Gradle or test files; keep your classes in `src/main/java/`.
+* Validation loops? Use `while` loops that continue until the entered value is inside the allowed range.
+
+
+
+# GitHub Classroom Setup & IDE Integration
+
+This guide walks you through creating your private GitHub Classroom repo, generating a fine-grained Personal Access Token (PAT), and connecting your IDE. Use the **Eclipse**, **IntelliJ**, or **VS Code** section as needed.
+
+---
 
 ## 1) Get your private repo (GitHub Classroom)
 
-1. Open the **assignment invitation link** from your instructor/TA.
-2. Click **Accept assignment**. Classroom creates a **private repository** for you in the course org. Some assignments include starter code/tests; others may be empty.
+1. Open the **assignment invitation link** on Canvas.
+2. Click **Accept assignment** for **“A1-Price-to-earnings.”**
+3. GitHub Classroom creates your **private** repo in the **SMU-CompSci** organization. You’ll push your code to this repo.
 
 ---
 
 ## 2) Create a Fine-Grained Personal Access Token (PAT)
 
-Use a **fine-grained** PAT to authenticate Git operations (clone/fetch/pull/push) from IntelliJ.
+Use a fine-grained PAT for authenticated Git operations from your IDE.
 
-1. GitHub → **Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token**
-2. **Resource owner:** select your course org (e.g., `SMU-CompSci`).
-3. **Repository access:** choose **All repositories** (the org only gives you private assignment repos).
-4. **Repository permissions:** **Repository → Contents: Read and write**. (*Metadata: Read* is fine.)
-5. Choose an **Expiration** (e.g., end of term), **Generate**, and **copy** the token (store it securely).
-6. If org approval/SSO is required, notify the TA so they can grant access.
-7. After approval, you can pull/push for the rest of the term.
+1. GitHub → **Settings** → **Developer settings** → **Personal access tokens** → **Fine-grained tokens** → **Generate new token**
+2. **Token name:** `First_Last_<IDE>` (e.g., `Lawrence_Klinkert_Eclipse`)
+3. **Resource owner:** `SMU-CompSci`
+4. **Expiration:** `12/15/2025` (last day of school)
+5. **Repository access:** **All repositories** (safe—your org grants only your private assignment repos)
+6. **Repository permissions:** **Contents → Read & write** (this also includes **Metadata**)
+7. Click **Generate**, then **copy** the token **once** and store it securely (e.g., `Keys.txt`).
+8. **Do not commit** your token or `Keys.txt` to Git.
+9. **Email the TA** to approve your token connection to `SMU-CompSci`.
+10. After approval, you can pull/commit/push from your IDE for the term.
 
-**Classic scopes ↔ Fine-grained permissions (reference):**
-
-* `repo` → **Repository / Contents (read & write)** (sufficient for pushes)
-* No admin/Actions permissions required for basic Git.
-
----
-
-## 3) Add your token/account to IntelliJ
-
-1. IntelliJ: **File → Settings → Version Control → GitHub → Add account → Log In with Token**
-2. Paste token → **Add Account**
-3. Verify Git path: **Settings → Version Control → Git → Test**
+> **Tip:** If you’re used to classic scopes, the fine-grained equivalent you need is **Repository → Contents: Read & write**. You do **not** need admin or workflow scopes for basic Git.
 
 ---
 
-## 4) Import (clone) your repo into IntelliJ
+## 3) Eclipse IDE
 
-1. In GitHub, open your private repo → **Code → copy URL**
-2. IntelliJ (Welcome) **Get from VCS** (or **File → New → Project from Version Control**) → paste URL → choose folder → **Clone**
-3. **Trust** the project when prompted; Gradle will auto-import
+### A) Clone & import your repo
+
+1. Open **Eclipse** → in **Package Explorer**, **Right-click** → **Import…**
+2. **Git → Projects from Git (with smart import)** → **Clone URI**
+3. Paste your repo **HTTPS URL** (from your private SMU-CompSci repo).
+4. **User:** your GitHub username
+   **Password:** your **fine-grained token** (from `Keys.txt`) → **Next**
+5. Branches: **check `main` only** (uncheck `feedback`) → **Next**
+6. Choose a local folder (e.g., `C:\Users\<you>\CS1342\a1`) → **Next** → **Finish**
+7. Wait for Eclipse to build. Expand your project (e.g., `a1-price-to-earnings`).
+8. In `src/main/java/`, **create**:
+
+    * `Business.java`
+    * `BusinessEvaluation.java`
+9. **Do not edit** other provided files (Gradle config, tests, etc.).
+
+### B) Basic Git (Pull → Commit → Push)
+
+* **Pull** updates: **Right-click project → Team → Pull…**
+* **Commit** changes:
+
+    1. **Right-click → Team → Commit…** (or open **Git Staging**: **Window → Show View → Other… → Git → Git Staging**)
+    2. Move files to **Staged Changes** (+), write a clear **Commit Message**, verify **Author/Committer**.
+    3. Click **Commit** (local) **or** **Commit and Push** (local + remote).
+* **Push** (if you only committed): **Right-click → Team → Push to Upstream**.
+
+> **Common push error (rejected: non-fast-forward):**
+> Pull first (**Team → Pull…**), resolve merges, then commit/push again.
+
+> **Pro tips:**
+> • Pull before each work session. • Commit early/often with meaningful messages.
+> • Never commit secrets (tokens, `Keys.txt`). Consider a global gitignore entry.
 
 ---
 
-## 5) Basic Git in IntelliJ: Pull → Commit → Push
+## 4) IntelliJ IDEA
 
-* **Pull/Fetch:** **Git → Pull** / **Fetch**
-* **Commit:** Use the **Commit** tool window → message → **Commit**
-* **Push:** **Git → Push…** (uses your saved token)
+### A) Add your GitHub account (token)
+
+1. **File → Settings → Version Control → GitHub → Add account → Log In with Token**
+2. Paste your **fine-grained token** → **Add Account**
+3. Verify Git is detected: **Settings → Version Control → Git → Test**.
+
+### B) Clone & import your repo
+
+1. In your GitHub repo, click **Code → HTTPS**, copy the URL.
+2. IntelliJ (Welcome screen) → **Get from VCS**
+   *(or* **File → New → Project from Version Control**\*)\*
+3. Paste URL → choose local folder → **Clone**.
+4. When prompted, **Trust** the project; IntelliJ will auto-import **Gradle**.
+
+> **Re-open later:** Open the project root or `build.gradle` and IntelliJ will re-import.
+
+### C) Basic Git (Pull → Commit → Push)
+
+* **Pull/Fetch:** **Git** widget (top bar) → **Pull** / **Fetch**
+* **Commit:** Open **Commit** tool window → select files → write message → **Commit**
+* **Push:** **Git → Push…** (first push uses your saved token)
+
+### D) Quick fixes
+
+* **Push rejected:** **Git → Pull** (optionally **rebase**), resolve conflicts, then **Push**.
+* **403 / auth failed:** Confirm token is **fine-grained**, **owner = SMU-CompSci**, **Contents: Read & write**, and has org approval.
+* **Gradle issues:** Click **Reload All Gradle Projects**, or **File → Invalidate Caches / Restart**, then re-import.
 
 ---
 
-## 6) Quick checks & common fixes
+## 5) VS Code
 
-* **Non-fast-forward / push rejected:** **Pull** (optionally **rebase**), resolve conflicts, then **Push**
-* **403 / auth failed:** Token must be **fine-grained**, **owned by course org**, with **Repository → Contents: Read & write**; confirm org approval
-* **Gradle import issues:** Re-open from `build.gradle` or **Reload All Gradle Projects**; if needed, **Invalidate Caches / Restart**
+### A) Install prerequisites (one-time)
+
+1. **Install Git** on your OS (VS Code uses your system Git).
+2. **Install a JDK** (Java 17+ recommended) and tell VS Code which JDK to use.
+
+    * In VS Code, run **Command Palette → “Java: Configure Java Runtime”** to view/set the runtime used by your projects.
+3. **Install the Extension Pack for Java** (language support, project manager, test/debug).
+
+> If you have multiple JDKs, “Java: Configure Java Runtime” lets you choose defaults per project or workspace.
 
 ---
+
+### B) Clone your private repo using your fine-grained PAT
+
+1. In your GitHub repo, click **Code → HTTPS** and copy the URL.
+2. In VS Code: **Source Control** → **Clone Repository** (or **Command Palette → Git: Clone**), paste the HTTPS URL.
+3. When Git prompts for credentials:
+
+    * **Username:** your GitHub username
+    * **Password:** **paste your fine-grained token** from Step 2 of this guide.
+      Git will accept a PAT **in place of a password** for HTTPS, and you can cache it with a credential helper (e.g., Git Credential Manager).
+
+> Note: The **Accounts** sign-in in VS Code is for GitHub OAuth features (PRs, Settings Sync). For Git **clone/pull/push** with a **fine-grained PAT**, authenticate via the Git HTTPS prompt as above.
+---
+
+### C) Open & build the Java project
+
+1. After cloning, **Open Folder** (the repo root).
+2. VS Code’s Java tools will detect Gradle/Maven projects and prompt to import/build. Use the Java run/debug views to compile/run tests as needed.
+
+---
+
+### D) Basic Git (Pull → Commit → Push)
+
+* **Pull** updates: **Source Control** view → **…** → **Pull** (or Command Palette).
+* **Stage & Commit**: check files, write a clear message, **Commit**.
+* **Push**: **… → Push** (or the cloud-arrow icon). VS Code wraps standard Git commands.
+
+---
+
+### E) Quick fixes & common errors
+
+* **403 / auth failed on push** → Your token likely lacks **Repository → Contents: Read & write** or org approval isn’t complete. Adjust token permissions/approval.
+* **Endless auth prompts** → Ensure a credential helper (e.g., Git Credential Manager) is active so your PAT is cached securely.
+* **JDK not detected / wrong version** → Use **Java: Configure Java Runtime** to select the correct JDK for the project.
+
+
+
