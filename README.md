@@ -37,20 +37,22 @@ a1-price-to-earnings/
 ├─ src
 │  └─ main
 │     └─ java
-│        ├─ Business.java               (you add)
-│        └─ BusinessEvaluation.java     (you add)
-└─ (other project files)                (do not edit)
+│        └─ com
+│           └─ student_work
+│              ├─ Business.java               (you add)
+│              └─ BusinessEvaluation.java     (you add)
+└─ (other project files)                      (do not edit)
 ```
 
-* **Only** add your code to `src/main/java/`.
-* **Do not** modify Gradle files, tests, or any files outside `src/main/java/`.
+* **Only** add your code to `src/main/java/com/student_work`.
+* **Do not** modify Gradle files, tests, or any files outside `src/main/java/com/student_work`.
 * Your code must **compile**.
 
 ---
 
 ## Function Description
 
-### `Business` (in `src/main/java/Business.java`)
+### `Business` (in `src/main/java/com/student_work/Business.java`)
 
 Create a class to encapsulate year-by-year data.
 
@@ -77,7 +79,7 @@ Create a class to encapsulate year-by-year data.
 
 > Keep names and array sizes **exactly** as specified.
 
-### `BusinessEvaluation` (in `src/main/java/BusinessEvaluation.java`)
+### `BusinessEvaluation` (in `src/main/java/com/student_work/BusinessEvaluation.java`)
 
 This is the **entry point** with `public static void main(String[] args)`:
 
@@ -126,8 +128,8 @@ If a value is out of range, **re-prompt** using the **same** prompt text until a
   `earning ratio marketValue`
 * **Project layout:** only edit
 
-    * `src/main/java/Business.java`
-    * `src/main/java/BusinessEvaluation.java`
+    * `src/main/java/com/student_work/Business.java`
+    * `src/main/java/com/student_work/BusinessEvaluation.java`
       Do **not** modify Gradle files, tests, or any other files.
 * Code must **compile**.
 
@@ -220,12 +222,12 @@ The program prints one line per year with `earning ratio marketValue`.
 * ❌ Skipping input validation or not re-prompting.
 * ❌ Printing additional debug text in the final results.
 * ❌ Renaming required fields/methods (autograder may depend on names).
-* ❌ Placing files outside `src/main/java/`.
+* ❌ Placing files outside `src/main/java/com/student_work/`.
 
 ## Need help?
 
 * Can’t push? Recheck token permissions (Content: Read & Write), repo access, and that you’re using the token as your password.
-* Build problems? Make sure you didn’t edit Gradle or test files; keep your classes in `src/main/java/`.
+* Build problems? Make sure you didn’t edit Gradle or test files; keep your classes in `src/main/java/com/student_work/`.
 * Validation loops? Use `while` loops that continue until the entered value is inside the allowed range.
 
 
@@ -275,11 +277,6 @@ Use a fine-grained PAT for authenticated Git operations from your IDE.
 5. Branches: **check `main` only** (uncheck `feedback`) → **Next**
 6. Choose a local folder (e.g., `C:\Users\<you>\CS1342\a1`) → **Next** → **Finish**
 7. Wait for Eclipse to build. Expand your project (e.g., `a1-price-to-earnings`).
-8. In `src/main/java/`, **create**:
-
-    * `Business.java`
-    * `BusinessEvaluation.java`
-9. **Do not edit** other provided files (Gradle config, tests, etc.).
 
 ### B) Basic Git (Pull → Commit → Push)
 
